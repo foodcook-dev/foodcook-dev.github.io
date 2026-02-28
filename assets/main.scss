@@ -569,3 +569,79 @@ a {
     font-weight: 600 !important;
   }
 }
+
+::selection {
+  background-color: #ffe329 !important; /* 마인드쿡 메인 컬러 */
+  color: #111 !important; /* 형광펜 배경에서 글씨가 잘 보이도록 진한 색으로 고정 */
+}
+
+/* Firefox 브라우저 호환성을 위한 코드 */
+::-moz-selection {
+  background-color: #ffe329 !important;
+  color: #111 !important;
+}
+
+/* =========================================
+   자동 목차 (TOC) 디자인 및 부드러운 스크롤 (수정본)
+   ========================================= */
+
+html {
+  scroll-behavior: smooth;
+}
+
+.toc-container {
+  background-color: #f8f9fa;
+  border-radius: 12px;
+  padding: 24px 30px;
+  margin-bottom: 50px;
+  border: 1px solid #f1f3f5;
+}
+
+.toc-title {
+  font-size: 18px;
+  font-weight: 700;
+  color: #212529;
+  margin-bottom: 15px;
+  padding-bottom: 15px;
+  border-bottom: 1px solid #e9ecef;
+}
+
+.toc-list {
+  list-style: none;
+  padding: 0;
+  margin: 0;
+}
+
+/* 🚨 수정된 부분: a 태그를 블록으로 만들고 패딩을 줍니다 */
+.toc-item {
+  margin: 2px 0; /* 위아래 항목 간격 */
+}
+
+.toc-item a {
+  display: block; /* 한 줄을 꽉 채우도록 블록 요소로 변경 */
+  padding: 8px 12px; /* 넉넉한 여백을 주어 둥근 박스 형태로 만듦 */
+  border-radius: 8px; /* 모서리 둥글게 */
+  color: #495057;
+  border-bottom: none !important; /* 밑줄 제거 */
+  font-size: 15px;
+  transition: all 0.2s ease;
+  line-height: 1.6;
+  text-decoration: none !important;
+}
+
+/* 마우스 올렸을 때: 연한 노란색 배경 + 메인 컬러 텍스트 */
+.toc-item a:hover {
+  /* 배경은 메인 컬러(#FFE329)에 투명도 15% 적용 */
+  background-color: rgba(255, 227, 41, 0.15) !important;
+
+  /* 글씨는 가독성을 위해 살짝 진하게 조정한 메인 컬러 */
+  color: #cca600 !important;
+  font-weight: 700;
+}
+
+/* h3 (###) 태그의 목차 스타일 */
+.toc-h3 a {
+  padding-left: 32px; /* 블록 전체가 칠해지도록 a 태그 안쪽으로 들여쓰기 */
+  font-size: 14.5px;
+  color: #868e96;
+}
