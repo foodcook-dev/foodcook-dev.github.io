@@ -1,0 +1,346 @@
+---
+---
+
+@import "minima";
+
+/* 1. 웹 폰트 (Pretendard) 불러오기 */
+@import url("https://cdn.jsdelivr.net/gh/orioncactus/pretendard@v1.3.9/dist/web/static/pretendard.min.css");
+
+/* 2. 전체 페이지에 폰트 적용하기 */
+body,
+h1,
+h2,
+h3,
+h4,
+h5,
+h6,
+p,
+a,
+span,
+li {
+  font-family:
+    "Pretendard",
+    -apple-system,
+    BlinkMacSystemFont,
+    system-ui,
+    Roboto,
+    "Helvetica Neue",
+    "Segoe UI",
+    "Apple SD Gothic Neo",
+    "Noto Sans KR",
+    "Malgun Gothic",
+    sans-serif !important;
+}
+
+/* 3. 브랜드 컬러(#FFE329) 포인트 적용 */
+a {
+  color: #222; /* 기본 링크 색상은 진한 회색으로 가독성 확보 */
+  text-decoration: none;
+  transition: all 0.2s ease-in-out;
+
+  &:hover {
+    /* 마우스를 올렸을 때 브랜드 컬러로 형광펜을 칠한 듯한 효과 */
+    background: linear-gradient(to top, #ffe329 40%, transparent 40%);
+  }
+}
+
+/* 4. 상단 헤더 스타일 */
+.site-header {
+  border-bottom: 1px solid #e8e8e8 !important;
+}
+
+.site-nav .page-link {
+  color: #333 !important;
+  font-weight: 600 !important;
+}
+
+.site-nav .page-link:hover {
+  /* 상단 메뉴는 마우스 오버 시 브랜드 컬러 텍스트로 변경 (약간 어둡게 처리하여 가독성 보완 가능) */
+  color: #d1b817 !important;
+}
+
+/* --- 카드형 리스트 디자인 --- */
+.post-card {
+  display: flex;
+  height: 260px; /* 카드 전체 높이 */
+  border-radius: 12px;
+  overflow: hidden;
+  background-color: #f8f9fa; /* 사진처럼 옅은 회색 배경 */
+  transition:
+    transform 0.2s ease,
+    box-shadow 0.2s ease;
+
+  /* 마우스 오버 시 카드가 살짝 떠오르는 효과 */
+  &:hover {
+    transform: translateY(-5px);
+    box-shadow: 0 10px 20px rgba(0, 0, 0, 0.05);
+  }
+
+  /* 왼쪽 이미지 영역 (45% 차지) */
+  .post-image {
+    width: 45%;
+    flex-shrink: 0;
+
+    img {
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+    }
+  }
+
+  /* 오른쪽 텍스트 영역 (55% 차지) */
+  .post-content {
+    width: 55%;
+    padding: 35px 40px;
+    display: flex;
+    flex-direction: column;
+  }
+
+  .post-meta {
+    display: flex;
+    justify-content: space-between;
+    font-size: 14px;
+    color: #868e96;
+    font-weight: 500;
+    margin-bottom: 20px;
+  }
+
+  .post-title {
+    margin: 0 0 10px 0;
+    font-size: 22px;
+    font-weight: 700;
+    line-height: 1.4;
+    word-break: keep-all;
+
+    .post-link {
+      color: #212529;
+      /* 마우스 오버 시 브랜드 컬러(#FFE329) 형광펜 효과 */
+      &:hover {
+        background: linear-gradient(to top, #ffe329 40%, transparent 40%);
+      }
+    }
+  }
+
+  .post-excerpt {
+    font-size: 15px;
+    color: #495057;
+    line-height: 1.6;
+    margin: 0;
+    word-break: keep-all;
+    flex-grow: 1; /* 남은 공간을 채워서 태그가 항상 바닥에 붙게 만듦 */
+  }
+
+  /* 둥근 알약 형태의 태그 */
+  .post-tags {
+    display: flex;
+    gap: 8px;
+    margin-top: 15px;
+
+    .tag-pill {
+      background-color: #ffffff;
+      border: 1px solid #dee2e6;
+      padding: 6px 12px;
+      border-radius: 20px;
+      font-size: 12px;
+      color: #495057;
+      font-weight: 600;
+    }
+  }
+}
+
+/* 모바일 화면(작은 화면)에서는 이미지가 위로, 글이 아래로 가도록 세로 배치 */
+@media screen and (max-width: 768px) {
+  .post-card {
+    flex-direction: column;
+    height: auto;
+
+    .post-image {
+      width: 100%;
+      height: 200px;
+    }
+
+    .post-content {
+      width: 100%;
+      padding: 25px;
+    }
+  }
+}
+
+/* --- 5. 전체 레이아웃 너비 확장 (1020px) --- */
+.wrapper {
+  max-width: 1020px !important;
+  padding-right: 20px; /* 모바일 화면을 위한 최소한의 좌우 여백 */
+  padding-left: 20px;
+}
+
+/* 메인 화면의 글 리스트 컨테이너도 1020px에 맞게 꽉 채우기 */
+.home {
+  max-width: 1020px;
+  margin: 0 auto; /* 중앙 정렬 */
+}
+
+/* --- 6. 포스트(본문) 페이지 디자인 --- */
+.post-container {
+  max-width: 800px; /* 글 읽기에 가장 편안한 너비로 제한 */
+  margin: 0 auto;
+  padding: 60px 20px 100px;
+}
+
+/* 글 상단 헤더 (가운데 정렬) */
+.post-header {
+  margin-bottom: 60px;
+  text-align: center;
+
+  .post-category {
+    font-weight: 700;
+    font-size: 16px;
+    margin-bottom: 15px;
+    color: #d1b817; /* 브랜드 컬러(#FFE329) 기반 톤다운 옐로우 */
+  }
+
+  .post-title {
+    font-size: 38px;
+    font-weight: 800;
+    line-height: 1.35;
+    color: #111;
+    margin-bottom: 25px;
+    word-break: keep-all;
+  }
+
+  .post-meta {
+    font-size: 15px;
+    color: #888;
+  }
+}
+
+/* 마크다운 본문 컨텐츠 스타일링 */
+.post-content {
+  font-size: 17px;
+  line-height: 1.8; /* 줄간격을 넓혀 가독성 확보 */
+  color: #333;
+  word-break: keep-all;
+
+  /* 마크다운 제목 태그 스타일 */
+  h2 {
+    font-size: 26px;
+    font-weight: 700;
+    margin: 60px 0 20px 0;
+    padding-bottom: 10px;
+    border-bottom: 1px solid #eee; /* h2 밑에 옅은 선 추가 */
+  }
+
+  h3 {
+    font-size: 21px;
+    font-weight: 700;
+    margin: 40px 0 15px 0;
+  }
+
+  p {
+    margin-bottom: 25px;
+  }
+
+  /* 본문 내 링크 강조 */
+  a {
+    color: #222;
+    border-bottom: 2px solid #ffe329; /* 밑줄에 메인 컬러 적용 */
+    padding-bottom: 1px;
+    &:hover {
+      background-color: #ffe329;
+    }
+  }
+
+  /* 인용구 (>) 스타일 */
+  blockquote {
+    margin: 0 0 25px 0;
+    padding: 15px 20px;
+    border-left: 5px solid #ffe329; /* 왼쪽에 메인 컬러 띠 */
+    background-color: #fafafa;
+    color: #555;
+  }
+
+  /* 짧은 코드 (`code`) 및 코드 블록 (````) 스타일 */
+  code {
+    background-color: #f1f3f5;
+    padding: 3px 6px;
+    border-radius: 4px;
+    font-family: "Consolas", monospace;
+    font-size: 0.9em;
+    color: #e83e8c; /* 짧은 코드는 핑크색 포인트 */
+  }
+
+  pre {
+    background-color: #282c34; /* 개발자에게 익숙한 다크 테마 배경 */
+    color: #abb2bf;
+    padding: 20px;
+    border-radius: 8px;
+    overflow-x: auto;
+    margin-bottom: 25px;
+    line-height: 1.5;
+
+    code {
+      background-color: transparent;
+      color: inherit;
+      padding: 0;
+    }
+  }
+
+  img {
+    max-width: 100%;
+    border-radius: 8px;
+    margin: 30px 0;
+  }
+}
+
+/* 본문 하단 태그 목록 */
+.post-tags-bottom {
+  margin-top: 60px;
+  padding-top: 30px;
+  border-top: 1px solid #eee;
+  display: flex;
+  flex-wrap: wrap;
+  gap: 10px;
+
+  .tag-pill {
+    background-color: #f8f9fa;
+    border: 1px solid #e9ecef;
+    color: #666;
+    padding: 8px 16px;
+    border-radius: 20px;
+    font-size: 14px;
+    font-weight: 600;
+  }
+}
+
+/* --- 메인 화면 카테고리 필터 탭 디자인 --- */
+
+.category-filter {
+  /* 가운데 정렬 시 아래 밑줄이 있으면 어색할 수 있어 밑줄을 제거합니다 */
+  border-bottom: none;
+  padding-bottom: 0;
+
+  .filter-btn {
+    background-color: #ffffff;
+    border: 1px solid #e9ecef; /* 연한 테두리 추가 */
+    font-size: 16px;
+    font-weight: 600;
+    color: #868e96;
+    cursor: pointer;
+    padding: 10px 24px; /* 좌우 패딩을 늘려서 안정적인 알약 형태로 만듦 */
+    border-radius: 30px; /* 모서리를 완전히 둥글게 처리 */
+    transition: all 0.2s ease;
+    font-family: inherit;
+
+    &:hover {
+      background-color: #f8f9fa;
+      color: #495057;
+    }
+
+    /* 선택된(활성화된) 탭의 스타일 */
+    &.active {
+      color: #111;
+      background-color: #ffe329; /* 마인드쿡 메인 컬러 */
+      border-color: #ffe329; /* 테두리 색상도 메인 컬러로 일치 */
+      font-weight: 700;
+    }
+  }
+}

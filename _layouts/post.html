@@ -1,0 +1,48 @@
+---
+layout: default
+---
+
+<div class="post-container">
+  <header class="post-header">
+    {% if page.categories.size > 0 %}
+    <div class="post-category">{{ page.categories | first }}</div>
+    {% endif %}
+
+    <h1 class="post-title">{{ page.title | escape }}</h1>
+
+    <div class="post-meta" style="margin-top: 20px">
+      <span class="post-date">{{ page.date | date: "%Y년 %m월 %d일" }}</span>
+    </div>
+  </header>
+
+  <article class="post-content">{{ content }}</article>
+
+  {% if page.tags.size > 0 %}
+  <div class="post-tags-bottom">
+    {% for tag in page.tags %}
+    <span class="tag-pill">#{{ tag }}</span>
+    {% endfor %}
+  </div>
+  {% endif %} {% if page.author %} {% assign author = site.data.authors[page.author] %}
+
+  <div class="post-author-bottom" style="margin-top: 50px; padding-top: 40px; border-top: 1px solid #eee; display: flex; align-items: center; gap: 24px">
+    {% if author.avatar %}
+    <img src="{{ author.avatar | relative_url }}" alt="{{ author.name }}" style="width: 80px; height: 80px; border-radius: 50%; object-fit: cover; border: 1px solid #f1f3f5" />
+    {% else %}
+    <div style="width: 80px; height: 80px; border-radius: 50%; background-color: #f1f3f5"></div>
+    {% endif %}
+
+    <div class="author-info" style="display: flex; flex-direction: column; gap: 10px">
+      <div class="author-title" style="font-size: 18px; font-weight: 700; color: #333">
+        {{ author.name | default: page.author }}
+        <span style="font-weight: 400; color: #adb5bd; margin: 0 4px">|</span>
+        <span style="font-weight: 500; color: #495057">{{ author.role | default: "Engineer" }}</span>
+      </div>
+
+      {% if author.bio %}
+      <div class="author-bio" style="font-size: 16px; color: #495057">{{ author.bio }}</div>
+      {% endif %}
+    </div>
+  </div>
+  {% endif %}
+</div>

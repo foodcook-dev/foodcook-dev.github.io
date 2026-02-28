@@ -1,0 +1,20 @@
+# _data/authors.yml
+
+# 예시 1: 프론트엔드 개발자 프로필
+unoung:
+  name: "바로바로"
+  role: "Back-end Engineer"
+  avatar: "/assets/avatar-unoung.png"
+  bio: "바로 개발해보자!" # 사진처럼 프로필 아래에 들어갈 한 줄 소개
+
+# 예시 2: 백엔드 개발자 프로필
+backend_dev:
+  name: "김마인드"
+  role: "Backend Engineer"
+  avatar: "/assets/avatar-backend.png"
+
+# 예시 3: 팀 단위 프로필 (개인이 아닌 팀 이름으로 올릴 때)
+marketing_team:
+  name: "마인드쿡 마케팅팀"
+  role: "Growth & Marketing"
+  avatar: "/assets/logo.png" # 아까 추가한 회사 로고 재사용 가능
