@@ -13,6 +13,6 @@ jobs:
 
     steps:
       - name: "맞춤법 검사 봇 실행"
-        uses: heumsi/korean-grammar-action@v0.2.8
+        uses: unoung/korean-grammar-action@master
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
