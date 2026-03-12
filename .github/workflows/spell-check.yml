@@ -10,6 +10,7 @@ jobs:
   spell_check:
     runs-on: ubuntu-latest
     permissions:
+      contents: read
       pull-requests: write # 봇이 PR에 댓글을 달 수 있도록 쓰기 권한 부여
 
     steps:
