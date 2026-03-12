@@ -22,6 +22,7 @@ jobs:
         id: changed-files
         uses: tj-actions/changed-files@v44
         with:
+          quotepath: false
           # 🚨 [수정!] 여러 줄 대신 중괄호를 써서 한 줄로 깔끔하게 묶었어.
           files: "**/*.{md,markdown}"
 
