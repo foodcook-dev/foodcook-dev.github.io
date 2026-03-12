@@ -1,16 +1,67 @@
-name: Check korean grammar on Pull Request
+name: Korean Spell Check
 
-# 댓글이 아니라, PR이 새로 열리거나 코드가 추가로 푸시될 때 자동으로 실행됩니다.
+# _posts 폴더 안의 마크다운(.md) 파일이 추가되거나 수정된 PR이 열릴 때만 자동으로 실행됩니다.
 on:
   pull_request:
-    types: [opened, synchronize]
+    paths:
+      - "_posts/**/*.md"
 
 jobs:
-  grammar_check:
+  spell_check:
     runs-on: ubuntu-latest
+    permissions:
+      pull-requests: write # 봇이 PR에 댓글을 달 수 있도록 쓰기 권한 부여
 
     steps:
-      - name: "맞춤법 검사 봇 실행"
-        uses: unoung/korean-grammar-action@master
-        env:
-          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+      - name: 1. 코드 가져오기
+        uses: actions/checkout@v4
+
+      - name: 2. 변경된 마크다운 파일 찾기
+        id: changed-files
+        uses: tj-actions/changed-files@v44
+        with:
+          files: _posts/**/*.md
+
+      - name: 3. Node.js 환경 세팅
+        if: steps.changed-files.outputs.any_changed == 'true'
+        uses: actions/setup-node@v4
+        with:
+          node-version: "20"
+
+      - name: 4. 맞춤법 검사기(hanspell-cli) 설치
+        if: steps.changed-files.outputs.any_changed == 'true'
+        run: npm install -g hanspell-cli
+
+      - name: 5. 맞춤법 검사 실행 및 결과 정리
+        if: steps.changed-files.outputs.any_changed == 'true'
+        id: run_spellcheck
+        run: |
+          REPORT="### 📝 마인드쿡 맞춤법 검사 봇\n\n"
+
+          # 변경된 파일들을 하나씩 돌면서 검사합니다.
+          for file in ${{ steps.changed-files.outputs.all_changed_files }}; do
+            REPORT+="#### 📄 \`$file\`\n"
+            
+            # hanspell-cli 실행 (-d 옵션으로 안정적인 Daum 엔진 사용)
+            # 검사 결과가 에러(오류 발견)여도 액션이 멈추지 않도록 '|| true' 추가
+            RESULT=$(hanspell-cli -d "$file" || true)
+            
+            if [ -z "$RESULT" ]; then
+              REPORT+="✨ 완벽합니다! 맞춤법 오류가 없습니다.\n\n"
+            else
+              # 결과를 마크다운 코드 블록 안에 예쁘게 넣습니다.
+              REPORT+="\`\`\`text\n$RESULT\n\`\`\`\n\n"
+            fi
+          done
+
+          # 다음 스텝(댓글 작성)으로 결과 텍스트를 전달합니다.
+          echo "report<<EOF" >> $GITHUB_OUTPUT
+          echo -e "$REPORT" >> $GITHUB_OUTPUT
+          echo "EOF" >> $GITHUB_OUTPUT
+
+      - name: 6. PR에 결과 댓글(Comment) 달기
+        if: steps.changed-files.outputs.any_changed == 'true'
+        uses: marocchino/sticky-pull-request-comment@v2
+        with:
+          header: spell-check
+          message: ${{ steps.run_spellcheck.outputs.report }}
