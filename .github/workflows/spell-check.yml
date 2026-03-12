@@ -1,27 +1,28 @@
 name: Korean Spell Check
 
-# _posts 폴더 안의 마크다운(.md) 파일이 추가되거나 수정된 PR이 열릴 때만 자동으로 실행됩니다.
+# PR이 열리거나 코드가 추가로 푸시될 때 자동으로 실행됩니다.
 on:
   pull_request:
-    paths:
-      - "_posts/**/*.md"
+    types: [opened, synchronize]
 
 jobs:
   spell_check:
     runs-on: ubuntu-latest
     permissions:
-      contents: read
-      pull-requests: write # 봇이 PR에 댓글을 달 수 있도록 쓰기 권한 부여
+      contents: read # 코드를 읽어올 권한
+      pull-requests: write # PR에 댓글을 달 권한
 
     steps:
       - name: 1. 코드 가져오기
         uses: actions/checkout@v4
+        with:
+          fetch-depth: 0 # 🚨 [핵심!] 이전 커밋 기록까지 전부 가져와서 '변경된 파일'을 완벽하게 찾아냅니다.
 
       - name: 2. 변경된 마크다운 파일 찾기
         id: changed-files
         uses: tj-actions/changed-files@v44
         with:
-          files: _posts/**/*.md
+          files: "**/*.md" # 🚨 [변경!] 폴더 상관없이 확장자가 .md인 파일이 수정되면 무조건 잡습니다.
 
       - name: 3. Node.js 환경 세팅
         if: steps.changed-files.outputs.any_changed == 'true'
@@ -39,23 +40,19 @@ jobs:
         run: |
           REPORT="### 📝 마인드쿡 맞춤법 검사 봇\n\n"
 
-          # 변경된 파일들을 하나씩 돌면서 검사합니다.
           for file in ${{ steps.changed-files.outputs.all_changed_files }}; do
             REPORT+="#### 📄 \`$file\`\n"
             
-            # hanspell-cli 실행 (-d 옵션으로 안정적인 Daum 엔진 사용)
-            # 검사 결과가 에러(오류 발견)여도 액션이 멈추지 않도록 '|| true' 추가
-            RESULT=$(hanspell-cli -d "$file" || true)
+            # 검사 실행 (터미널 출력값을 모두 캡처합니다)
+            RESULT=$(hanspell-cli -d "$file" 2>&1 || true)
             
             if [ -z "$RESULT" ]; then
               REPORT+="✨ 완벽합니다! 맞춤법 오류가 없습니다.\n\n"
             else
-              # 결과를 마크다운 코드 블록 안에 예쁘게 넣습니다.
-              REPORT+="\`\`\`text\n$RESULT\n\`\`\`\n\n"
+              REPORT+="\n\`\`\`text\n$RESULT\n\`\`\`\n\n"
             fi
           done
 
-          # 다음 스텝(댓글 작성)으로 결과 텍스트를 전달합니다.
           echo "report<<EOF" >> $GITHUB_OUTPUT
           echo -e "$REPORT" >> $GITHUB_OUTPUT
           echo "EOF" >> $GITHUB_OUTPUT
