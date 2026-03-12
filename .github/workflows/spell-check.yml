@@ -47,20 +47,30 @@ jobs:
         if: steps.changed-files.outputs.any_changed == 'true'
         id: run_spellcheck
         run: |
-          REPORT="### 📝 마인드쿡 맞춤법 검사 봇\n\n"
+          # 🚨 [추가] 터미널 색상 코드가 마크다운에 섞여서 깨지는 것을 방지합니다.
+          export FORCE_COLOR=0 
+
+          REPORT="### 📝 마인드쿡 맞춤법 검사 결과\n\n"
+          HAS_ERROR=false
 
           for file in ${{ steps.changed-files.outputs.all_changed_files }}; do
-            REPORT+="#### 📄 \`$file\`\n"
             
-            # 🚨 [수정 3] cat으로 파일을 읽어서 파이프(|)로 넘겨주기
-            RESULT=$(cat "$file" | hanspell-cli 2>&1 || true)
+            # 🚨 [핵심 변경] 
+            # 1. grep " -> " : 구구절절한 설명 다 버리고 'A -> B' 형태의 줄만 빼옵니다.
+            # 2. awk '!seen[$0]++' : 똑같은 단어를 여러 번 틀렸을 경우 한 번만 나오게 중복을 제거합니다.
+            # 3. sed 's/^/- /' : 앞에 마크다운 글머리 기호(-)를 붙여서 예쁜 리스트로 만듭니다.
+            RESULT=$(cat "$file" | hanspell-cli 2>&1 | grep " -> " | awk '!seen[$0]++' | sed 's/^/- /' || true)
             
-            if [ -z "$RESULT" ]; then
-              REPORT+="✨ 완벽합니다! 맞춤법 오류가 없습니다.\n\n"
-            else
-              REPORT+="\n\`\`\`text\n$RESULT\n\`\`\`\n\n"
+            if [ -n "$RESULT" ]; then
+              HAS_ERROR=true
+              REPORT+="#### 📄 \`$file\`\n"
+              REPORT+="$RESULT\n\n"
             fi
           done
+
+          if [ "$HAS_ERROR" = false ]; then
+            REPORT+="✨ 완벽합니다! 수정된 파일에 맞춤법 오류가 없습니다.\n\n"
+          fi
 
           echo "report<<EOF" >> $GITHUB_OUTPUT
           echo -e "$REPORT" >> $GITHUB_OUTPUT
