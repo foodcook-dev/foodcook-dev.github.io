@@ -1,14 +1,12 @@
-name: Check korean grammar on pull request comment
+name: Check korean grammar on Pull Request
 
-# PR에 새로운 코멘트가 달렸을 때 작동합니다.
+# 댓글이 아니라, PR이 새로 열리거나 코드가 추가로 푸시될 때 자동으로 실행됩니다.
 on:
-  issue_comment:
-    types: [created]
+  pull_request:
+    types: [opened, synchronize]
 
 jobs:
   grammar_check:
-    # 달린 코멘트가 PR에 작성된 것이고, 내용이 정확히 '/맞춤법'일 때만 실행합니다.
-    if: ${{ github.event.issue.pull_request && github.event.comment.body == '/맞춤법' }}
     runs-on: ubuntu-latest
 
     steps:
