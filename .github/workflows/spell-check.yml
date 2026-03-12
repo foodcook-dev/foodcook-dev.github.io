@@ -22,10 +22,14 @@ jobs:
         id: changed-files
         uses: tj-actions/changed-files@v44
         with:
-          # 🚨 [수정 1] 여러 줄로 작성해서 .md와 .markdown 모두 잡아내기
-          files: |
-            **/*.md
-            **/*.markdown
+          # 🚨 [수정!] 여러 줄 대신 중괄호를 써서 한 줄로 깔끔하게 묶었어.
+          files: "**/*.{md,markdown}"
+
+      # 🚨 [추가!] 진짜로 파일을 감지했는지 눈으로 확인하기 위한 디버그 스텝
+      - name: 2-1. [디버그] 감지된 파일 목록 확인
+        run: |
+          echo "감지된 마크다운 파일들: ${{ steps.changed-files.outputs.all_changed_files }}"
+          echo "변경 여부(true/false): ${{ steps.changed-files.outputs.any_changed }}"
 
       - name: 3. Node.js 환경 세팅
         if: steps.changed-files.outputs.any_changed == 'true'
