@@ -5,7 +5,7 @@ unoung:
   name: "그린"
   role: "프론트엔드 개발자"
   avatar: "/assets/author/green.png"
-  bio: "바로 개발해보자!" # 사진처럼 프로필 아래에 들어갈 한 줄 소개
+  # bio: "프론트" # 사진처럼 프로필 아래에 들어갈 한 줄 소개
 
 # 예시 2: 백엔드 개발자 프로필
 backend_dev:
